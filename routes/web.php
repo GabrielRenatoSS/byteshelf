@@ -13,6 +13,10 @@ Route::get('/', function () {
 
 Route::post('/login', [LoginController::class, 'authenticate']);
 
+Route::get('/recuperacaosenha', function() {
+    return view('recuperar_senha');
+})
+
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     

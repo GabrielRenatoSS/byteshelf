@@ -115,16 +115,6 @@ class UserController extends Controller
         return redirect()->route('users.show', $user->id);
     }
 
-    public function toggleBlock(Request $request, string $id)
-    {
-        $user = User::findOrFail($id);
-        if($user->tipo==0) {
-            if ($user->bloqueio == 0) $user->bloqueio = 1;
-            else $user->bloqueio = 0;
-            $user->save();
-        }
-        return back();
-    }
     /**
      * Remove the specified resource from storage.
      */
@@ -145,5 +135,16 @@ class UserController extends Controller
             return back();
         }
         abort(403);
+    }
+
+    public function toggleBlock(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+        if($user->tipo==0) {
+            if ($user->bloqueio == 0) $user->bloqueio = 1;
+            else $user->bloqueio = 0;
+            $user->save();
+        }
+        return back();
     }
 }
