@@ -20,7 +20,7 @@ class ComponenteController extends Controller
         }
 
         if ($request->filled('categoria')) {
-            $query->where('id_categoria', $request->categoria);
+            $query->where('categoria_id', $request->categoria);
         }
 
         $componentes = $query->paginate(12)->withQueryString();
@@ -51,7 +51,7 @@ class ComponenteController extends Controller
             'foto2' => 'nullable|image|max:2048',
             'foto3' => 'nullable|image|max:2048',
             'foto4' => 'nullable|image|max:2048',
-            'id_categoria' => 'required|integer',
+            'categoria_id' => 'required|integer',
         ]);
 
         if ($request->hasFile('foto1')) {

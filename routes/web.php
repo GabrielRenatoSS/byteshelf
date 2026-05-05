@@ -9,13 +9,13 @@ use App\Http\Controllers\LoginController;
 
 Route::get('/', function () {
     return view('login');
-})->name('login');
+});
 
-Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::get('/recuperacaosenha', function() {
-    return view('recuperar_senha');
-})
+    return "OK";
+})->name('recuperao');
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
@@ -32,14 +32,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
     Route::post('/carrinho/add/{id}', [CarrinhoController::class, 'adicionar'])->name('carrinho.add');
     Route::post('/carrinho/remove/{id}', [CarrinhoController::class, 'remover'])->name('carrinho.remove');
+
+    Route::get('/pedidos/{id}/status', [PedidoController::class, 'verStatus'])->name('pedidos.status');
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
     Route::resource('categoria', CategoriaController::class);
     Route::resource('componente', ComponenteController::class);
+
+    Route::post('/pedidos/{id}/aprovar', [PedidoController::class, 'aprovar']);
+    Route::post('/pedidos/{id}/reprovar', [PedidoController::class, 'reprovar']);
+    Route::post('/pedidos/{id}/sugerir', [PedidoController::class, 'sugerir']);
+    Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index');
 });
 
 Route::middleware(['auth', 'NotBlocked'])->group(function () {
-
+    Route::post('/pedidos/{id}/aceitar-sugestao', [PedidoController::class, 'aceitarSugestao']);
+    Route::post('/pedidos/{id}/recusar-sugestao', [PedidoController::class, 'recusarSugestao']);
+    Route::post('/pedidos/finalizar', [PedidoController::class, 'finalizarPedido'])->name('pedidos.finalizar');
 });
