@@ -14,7 +14,7 @@ Route::get('/', function () {
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::get('/recuperacaosenha', function() {
-    return "OK";
+    return view('recuperar_senha');
 })->name('recuperao');
 
 Route::middleware('auth')->group(function () {
@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
+    Route::get('/users/cadastro', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
     Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
     Route::resource('categoria', CategoriaController::class);
     Route::resource('componente', ComponenteController::class);

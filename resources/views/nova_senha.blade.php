@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova senha</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <img src="logo_retangular_azul.jpeg" class="logo-top">
+    </header>
+
+    <div class="main">
+        <div class="logo-area">
+            <img src="logo_quadrado_azul.jpeg" class="logo-big">
+        </div>
+
+        <div class="login-box">
+            <h2>Crie uma nova senha</h2>
+            <label>Nova senha</label>
+                
+            <div class="input">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="novaSenha" placeholder="••••••••">
+                <i class="fa-solid fa-eye-slash eye" onclick="toggleSenha('novaSenha', this)"></i>
+            </div>
+
+            <label>Confirmar nova senha</label>
+
+            <div class="input">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="confirmarSenha" placeholder="••••••••">
+                <i class="fa-solid fa-eye-slash eye" onclick="toggleSenha('confirmarSenha', this)"></i>
+            </div>
+        
+            <button onclick="salvarSenha()">Confirmar</button>
+        </div>
+    </div>  
+
+    <script src="../js/login.js"></script>
+
+</body>
+</html>
