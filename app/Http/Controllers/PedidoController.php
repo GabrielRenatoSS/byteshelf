@@ -76,7 +76,9 @@ class PedidoController extends Controller
             return $componente;
         });
 
-        return view('pedidos.status', compact('pedido'));
+        $temSugestao = $pedido->status === 'Sugestão em aberto';
+
+        return view('pedidos.status', compact('pedido', 'temSugestao'));
     }
 
     public function index()
@@ -179,5 +181,121 @@ class PedidoController extends Controller
         ]);
 
         return back()->with('success', 'Sugestão recusada. Pedido cancelado.');
+    }
+
+    public function cancelar($id)
+    {
+        $pedido = Pedido::where('id', $id)
+            ->where('id_usuario', Auth::id())
+            ->firstOrFail();
+
+        $statusBloqueados = ['Pronto para Retirada', 'Em Separação', 'Retirado'];
+
+        if (in_array($pedido->status, $statusBloqueados)) {
+            return back()->withErrors(['cancelar' => 'Não é possível cancelar um pedido com status "' . $pedido->status . '".']);
+        }
+
+        $pedido->update([
+            'status' => 'Cancelado',
+            'ativo'  => 0,
+        ]);
+
+        return back();
+    }
+
+    public function historico()
+    {
+        $pedidos = Pedido::with(['componentes' => function ($query) {
+            $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
+        }])
+        ->where('id_usuario', Auth::id())
+        ->where('ativo', 0)
+        ->orderBy('dt_solicitacao', 'desc')
+        ->get();
+
+        $pedidos->each(function ($pedido) {
+            $pedido->componentes->transform(function ($componente) {
+                $componente->foto = $componente->foto1 ?? 'componentes/foto_padrao.png';
+                return $componente;
+            });
+        });
+
+        return view('pedidos.historico', compact('pedidos'));
+    }
+
+    public function devolver(Request $request, $id)
+    {
+        $pedido = Pedido::where('id', $id)
+            ->where('id_usuario', Auth::id())
+            ->firstOrFail();
+
+        $estragados = $request->input('estragado', []);
+
+        $componentes = PedidoComponente::with('componente')
+            ->where('pedido_id', $pedido->id)
+            ->get();
+
+        foreach ($componentes as $item) {
+            $marcadoEstragado = isset($estragados[$item->componente_id]);
+
+            $item->update(['estragado' => $marcadoEstragado]);
+
+            if ($marcadoEstragado) {
+                $item->componente->increment('qt_estragada', $item->quantidade);
+            } else {
+                $item->componente->increment('qt_disponivel', $item->quantidade);
+            }
+        }
+
+        $pedido->update([
+            'status' => 'Devolvido',
+            'ativo'  => 0,
+        ]);
+
+        return back()->with('success', 'Pedido devolvido com sucesso.');
+    }
+
+    public function devolvidos()
+    {
+        $pedidos = Pedido::with(['usuario', 'componentes' => function ($query) {
+            $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
+        }])
+        ->where('status', 'Devolvido')
+        ->orderBy('dt_solicitacao', 'desc')
+        ->get();
+
+        return view('pedidos.devolvidos', compact('pedidos'));
+    }
+
+    public function detalheDevolvido($id)
+    {
+        $pedido = Pedido::with(['usuario', 'componentes' => function ($query) {
+            $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
+        }])->findOrFail($id);
+
+        $pedido->componentes->transform(function ($componente) {
+            $componente->foto = $componente->foto1 ?? 'componentes/foto_padrao.png';
+            return $componente;
+        });
+
+        return view('pedidos.detalhe_devolvido', compact('pedido'));
+    }
+
+    public function renovar($id)
+    {
+        $pedido = Pedido::where('id', $id)
+            ->where('id_usuario', Auth::id())
+            ->firstOrFail();
+
+        if ($pedido->renov >= $pedido->max_renov) {
+            return back()->withErrors(['renovar' => 'Limite de renovações atingido.']);
+        }
+
+        $pedido->update([
+            'renov'      => $pedido->renov + 1,
+            'dt_entrega' => \Carbon\Carbon::parse($pedido->dt_entrega)->addDays(7),
+        ]);
+
+        return back();
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PedidoComponente extends Model
 {
-    protected $fillable = ['quantidade', 'componente_id', 'pedido_id'];
+    protected $fillable = ['quantidade', 'componente_id', 'pedido_id', 'estragado'];
 
     public function pedido() {
         return $this->belongsTo(Pedido::class, 'pedido_id');

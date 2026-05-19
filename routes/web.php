@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/carrinho/remove/{id}', [CarrinhoController::class, 'remover'])->name('carrinho.remove');
 
     Route::get('/pedidos/{id}/status', [PedidoController::class, 'verStatus'])->name('pedidos.status');
+
+    Route::get('/pedidos/historico', [PedidoController::class, 'historico'])->name('pedidos.historico');
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
@@ -48,10 +50,18 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::post('/pedidos/{id}/reprovar', [PedidoController::class, 'reprovar']);
     Route::post('/pedidos/{id}/sugerir', [PedidoController::class, 'sugerir']);
     Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index');
+
+    Route::post('/pedidos/{id}/devolver', [PedidoController::class, 'devolver'])->name('pedidos.devolver');
+
+    Route::get('/pedidos/devolvidos', [PedidoController::class, 'devolvidos'])->name('pedidos.devolvidos');
+    Route::get('/pedidos/devolvidos/{id}', [PedidoController::class, 'detalheDevolvido'])->name('pedidos.detalheDevolvido');
+
+    Route::get('/componentes/estragados', [ComponenteController::class, 'estragados'])->name('componentes.estragados');
 });
 
 Route::middleware(['auth', 'NotBlocked'])->group(function () {
     Route::post('/pedidos/{id}/aceitar-sugestao', [PedidoController::class, 'aceitarSugestao']);
     Route::post('/pedidos/{id}/recusar-sugestao', [PedidoController::class, 'recusarSugestao']);
     Route::post('/pedidos/finalizar', [PedidoController::class, 'finalizarPedido'])->name('pedidos.finalizar');
+    Route::post('/pedidos/{id}/renovar', [PedidoController::class, 'renovar'])->name('pedidos.renovar');
 });

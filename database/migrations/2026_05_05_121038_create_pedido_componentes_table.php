@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->integer('quantidade');
+            $table->boolean('estragado');
             $table->foreignId('pedido_id')->constrained('pedidos')->onDelete('cascade');
             $table->foreignId('componente_id')->constrained('componentes')->onDelete('cascade');
         });

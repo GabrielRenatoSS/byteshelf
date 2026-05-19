@@ -158,4 +158,13 @@ class ComponenteController extends Controller
         $componente->delete();
         return back();
     }
+
+    public function estragados()
+    {
+        $componentes = Componente::where('qt_estragada', '>', 0)
+            ->orderBy('qt_estragada', 'desc')
+            ->get();
+
+        return view('componentes.estragados', compact('componentes'));
+    }
 }
