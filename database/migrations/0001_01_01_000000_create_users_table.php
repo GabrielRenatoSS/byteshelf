@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('bloqueio');
             $table->date("dt_nasc")->nullable();
-            $table->string('foto'); //mudei de como tava no projeto
+            $table->string('foto')->nullable(); //mudei de como tava no projeto
             $table->rememberToken();
             $table->timestamps();
         });

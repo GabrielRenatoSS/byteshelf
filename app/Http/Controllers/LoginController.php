@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // ← estava faltando isso
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -16,7 +16,7 @@ class LoginController extends Controller
 
         if(Auth::attempt($credenciais)) {
             $request->session()->regenerate();
-            return redirect()->intended('home');
+            return redirect()->intended(route('home'));
         } else {
             return back()->withErrors([
                 'email' => 'Usuário ou senha incorretos.',

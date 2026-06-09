@@ -133,6 +133,5 @@
         timer.textContent = `Código expira em: ${minutos}:${segundos}`;
     }, 1000);
 </script>
-
 </body>
 </html>

@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+:root {
+    --blue-main: #0022FF;
+    --text-black: #1A1A1A;
+    --grey-light: #F5F5F5;
+}
+
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+/* Somente o Topo (Header), que o Catálogo e Carrinho também usam */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 40px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+.main-logo { height: 25px; margin: 15px 0 10px 5px; }
+.nav-icons { display: flex; gap: 20px; color: var(--blue-main); font-size: 18px; }
