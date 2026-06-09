@@ -1,17 +1,20 @@
 <?php
 
-use Illuminate\Http\Request;
-
 namespace App\Http\Controllers;
+
+use App\Models\Componente;
+use Illuminate\Http\Request;
 
 class CarrinhoController extends Controller
 {
     public function index(Request $request)
     {
         $carrinho = json_decode($request->cookie('carrinho'), true) ?? [];
+
         $ids = array_column($carrinho, 'id');
-        
+
         $componentes = Componente::whereIn('id', $ids)->get();
+
         return view('carrinho.index', compact('carrinho', 'componentes'));
     }
 
@@ -24,7 +27,7 @@ class CarrinhoController extends Controller
         } else {
             $carrinho[$id] = [
                 'id' => $id,
-                'quantidade' => 1
+                'quantidade' => 1,
             ];
         }
 
@@ -36,8 +39,11 @@ class CarrinhoController extends Controller
     public function remover(Request $request, $id)
     {
         $carrinho = json_decode($request->cookie('carrinho'), true) ?? [];
+
         unset($carrinho[$id]);
+
         cookie()->queue('carrinho', json_encode($carrinho), 60 * 24 * 7);
+
         return back();
     }
 }

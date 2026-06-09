@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RecuperarSenhaController;
 
 Route::get('/', function () {
     return view('login');
@@ -13,13 +14,19 @@ Route::get('/', function () {
 
 Route::post('/login', [LoginController::class, 'authenticate']);
 
-Route::get('/recuperacaosenha', function() {
-    return view('recuperar_senha');
-})
+// === Recuperação de senha (com código) ===
+Route::get('/recuperacaosenha', [RecuperarSenhaController::class, 'create'])->name('password.request');
+Route::post('/recuperacaosenha', [RecuperarSenhaController::class, 'enviarCodigo'])->name('password.send');
+
+Route::get('/codigo-verificacao', [RecuperarSenhaController::class, 'codigoForm'])->name('codigo.form');
+Route::post('/codigo-verificacao', [RecuperarSenhaController::class, 'verificarCodigo'])->name('codigo.verify');
+
+Route::get('/nova-senha', [RecuperarSenhaController::class, 'novaSenhaForm'])->name('nova.senha.form');
+Route::post('/nova-senha', [RecuperarSenhaController::class, 'redefinirSenha'])->name('nova.senha.update');
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
-    
+
     Route::get('/home', function () {
         return view('home');
     })->name('home');
