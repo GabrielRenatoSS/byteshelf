@@ -15,6 +15,13 @@
 
 <div class="main">
 
+        <div class="logo-area">
+            <img src="{{ asset('assets/logo_quadrado_azul.jpeg') }}" alt="Logo Byteshelf" class="logo-big">
+        </div>
+
+        <div class="login-box">
+
+
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
