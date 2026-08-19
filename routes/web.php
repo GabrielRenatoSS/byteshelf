@@ -8,6 +8,7 @@ use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecuperarSenhaController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\MensagemEmailController;
 
 Route::get('/', function () {
     return view('login');
@@ -37,6 +38,9 @@ Route::post('/codigo-verificacao', [RecuperarSenhaController::class, 'verificarC
 
 Route::get('/nova-senha', [RecuperarSenhaController::class, 'novaSenhaForm'])->name('nova.senha.form');
 Route::post('/nova-senha', [RecuperarSenhaController::class, 'redefinirSenha'])->name('nova.senha.update');
+
+Route::get('/enviar-mensagem', [MensagemEmailController::class, 'form'])->name('mensagens.form');
+Route::post('/enviar-mensagem', [MensagemEmailController::class, 'enviar'])->name('mensagens.enviar');
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)->except(['index']);
