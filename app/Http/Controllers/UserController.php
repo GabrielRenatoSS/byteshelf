@@ -217,4 +217,24 @@ class UserController extends Controller
 
         return redirect()->route('home')->with('success', 'Regulamento aceito com sucesso!');
     }
+
+    public function verContatoAdm()
+    {
+        $adms = User::where('tipo', 1)
+            ->orderBy('name', 'asc')
+            ->get()
+            ->map(function ($adm) {
+                return [
+                    'id' => $adm->id,
+                    'name' => $adm->name,
+                    'email' => $adm->email,
+                    'telefone' => $adm->telefone,
+                    'foto' => $adm->foto 
+                        ? Storage::url($adm->foto) 
+                        : asset('fotos_usuarios/foto.jpg'),
+                ];
+            });
+
+        return view('contato-adm', compact('adms'));
+    }
 }

@@ -60,6 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/regulamento', 'regulamento');
     Route::get('/regulamento', [RegulamentoController::class, 'show'])->name('regulamento.show');
     Route::post('/regulamento/aceitar', [UserController::class, 'aceitarRegulamento'])->name('regulamento.aceitar');
+
+    Route::get('/contato-administradores', [UserController::class, 'verContatoAdm'])->name('users.adms');
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
