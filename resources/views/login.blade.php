@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Login ByteShelf</title>
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -37,7 +38,7 @@
 
                 <div class="senha-line">
                     <label>Senha</label>
-                    <a href="{{ route('recuperao') }}">Esqueceu sua senha?</a>
+                    <a href="{{ route('password.request') }}">Esqueceu sua senha?</a>
                 </div>
 
                 <div class="input @error('email') input-error @enderror">

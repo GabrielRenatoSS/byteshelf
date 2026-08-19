@@ -13,7 +13,11 @@ Route::get('/', function () {
     return view('login');
 })->name('paglogin');
 
-Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::post('/login', [LoginController::class, 'authenticate']);
 
 Route::get('/cadastro', function () {
     return view('cadastro');
@@ -41,9 +45,11 @@ Route::post('/nova-senha', [RecuperarSenhaController::class, 'redefinirSenha'])-
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)->except(['index']);
     
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
+    Route::get('/inicio', function () {
+        return view('inicio');
+    })->name('inicio');
+
+    Route::view('/catalogo', 'catalogo')->name('catalogo');
 
     Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria.index');
     Route::get('/componente', [ComponenteController::class, 'index'])->name('componente.index');
@@ -64,8 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/contato-administradores', [UserController::class, 'verContatoAdm'])->name('users.adms');
 });
 
-Route::middleware(['auth', 'IsAdmin'])->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('perfil');
     Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
     Route::resource('categoria', CategoriaController::class);
     Route::resource('componente', ComponenteController::class);

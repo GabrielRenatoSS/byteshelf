@@ -1,0 +1,143 @@
+/* ================================================= */
+/* TELA INICIAL */
+/* ================================================= */
+
+
+.inicio {
+    min-height: calc(100vh - 70px);
+
+
+    display: flex;
+    align-items: center;
+
+
+    padding: 40px 6%;
+
+
+    gap: 110px;
+}
+
+
+
+
+/* ================================================= */
+/* BOAS-VINDAS */
+/* ================================================= */
+
+
+.boas-vindas {
+    width: 50%;
+}
+
+
+.boas-vindas h1 {
+    font-size: 85px;
+
+
+    font-weight: 800;
+
+
+    line-height: 1.35;
+
+
+    color: #000;
+
+
+    margin-left: 50px;
+}
+
+
+
+
+/* ================================================= */
+/* OPÇÕES */
+/* ================================================= */
+
+
+.opcoes-inicio {
+    display: flex;
+
+
+    flex-direction: column;
+
+
+    gap: 40px;
+
+
+    width: 50%;
+   
+}
+
+
+
+
+/* ================================================= */
+/* CADA OPÇÃO */
+/* ================================================= */
+
+
+.opcao {
+    display: flex;
+
+
+    align-items: center;
+
+
+    gap: 25px;
+
+
+    cursor: pointer;
+
+
+    width: fit-content;
+
+
+    transition: 0.2s;
+}
+
+
+
+
+.opcao i {
+    color: #1437E8;
+
+
+    font-size: 32px;
+
+
+    transition: 0.2s;
+}
+
+
+
+
+.opcao span {
+    font-size: 20px;
+
+
+    font-weight: 400;
+
+
+    color: #000;
+}
+
+
+
+
+/* ================================================= */
+/* HOVER */
+/* ================================================= */
+
+
+.opcao:hover {
+    transform: translateX(8px);
+}
+
+
+.opcao:hover i {
+    transform: translateX(5px);
+}
+
+
+
+

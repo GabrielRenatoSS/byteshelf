@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // ← estava faltando isso
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +29,7 @@ class UserController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (\Exception $e) {
-            return redirect()->route('paglogin')->withErrors([
+            return redirect()->route('login')->withErrors([
                 'google' => 'Não foi possível autenticar com o Google.',
             ]);
         }
@@ -39,7 +38,7 @@ class UserController extends Controller
         $dominio = substr(strrchr($email, '@'), 1);
 
         if (!in_array($dominio, $this->dominiosPermitidos)) {
-            return redirect()->route('paglogin')->withErrors([
+            return redirect()->route('login')->withErrors([
                 'google' => 'Use um e-mail institucional (@iffarroupilha.edu.br ou @aluno.iffar.edu.br).',
             ]);
         }
@@ -69,7 +68,7 @@ class UserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        return redirect()->route('inicio');
     }
 
     /**
@@ -97,11 +96,11 @@ class UserController extends Controller
                 'created_at' => $user->created_at,
                 'foto' => $user->foto 
                     ? Storage::url($user->foto) 
-                    : asset('fotos_usuarios/foto.jpg'),
+                    : asset('assets/foto.jpg'),
             ];
         });
 
-        return view('users.index', compact('users'));
+        return view('usuarios', compact('users'));
     }
 
     /**
@@ -110,7 +109,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
-        return view('perfil', [
+        return view('usuarios', [
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -215,7 +214,7 @@ class UserController extends Controller
             'regulamento_aceito_em' => now(),
         ]);
 
-        return redirect()->route('home')->with('success', 'Regulamento aceito com sucesso!');
+        return redirect()->route('inicio')->with('success', 'Regulamento aceito com sucesso!');
     }
 
     public function verContatoAdm()
