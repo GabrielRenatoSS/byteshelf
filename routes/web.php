@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('perfil');
+    Route::get('/usuarios/pesquisar', [UserController::class, 'search'])->name('usuarios.search');
     Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
     Route::resource('categoria', CategoriaController::class);
     Route::resource('componente', ComponenteController::class);

@@ -236,4 +236,41 @@ class UserController extends Controller
 
         return view('contato-adm', compact('adms'));
     }
+
+    public function search(Request $request)
+    {
+        $termo = $request->query('q', $request->query('search'));
+
+        if (!$termo) {
+            return redirect()->route('usuarios.index');
+        }
+
+        $users = User::where('name', 'like', "%{$termo}%")
+            ->orWhere('email', 'like', "%{$termo}%")
+            ->orderBy('name', 'asc')
+            ->paginate(10);
+
+        $users->appends(['q' => $termo]);
+
+        $users->getCollection()->transform(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'cpf' => $user->cpf,
+                'telefone' => $user->telefone,
+                'tipo' => $user->tipo,
+                'matricula' => $user->matricula,
+                'email' => $user->email,
+                'bloqueio' => $user->bloqueio,
+                'dt_nasc' => $user->dt_nasc,
+                'google_id' => $user->google_id,
+                'created_at' => $user->created_at,
+                'foto' => $user->foto
+                    ? Storage::url($user->foto)
+                    : asset('assets/foto.jpg'),
+            ];
+        });
+
+        return view('usuarios', compact('users'));
+    }
 }
