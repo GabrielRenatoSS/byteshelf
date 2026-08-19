@@ -57,6 +57,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/pedidos/{id}/status', [PedidoController::class, 'verStatus'])->name('pedidos.status');
 
     Route::get('/pedidos/historico', [PedidoController::class, 'historico'])->name('pedidos.historico');
+    Route::view('/regulamento', 'regulamento');
+    Route::get('/regulamento', [RegulamentoController::class, 'show'])->name('regulamento.show');
+    Route::post('/regulamento/aceitar', [UserController::class, 'aceitarRegulamento'])->name('regulamento.aceitar');
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
@@ -76,6 +79,12 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::get('/pedidos/devolvidos/{id}', [PedidoController::class, 'detalheDevolvido'])->name('pedidos.detalheDevolvido');
 
     Route::get('/componentes/estragados', [ComponenteController::class, 'estragados'])->name('componentes.estragados');
+
+    Route::get('/pedidos/minhas-reservas', [PedidoController::class, 'reservas'])->name('pedidos.reservas');
+    Route::post('/pedidos/reservas/{id}/devolver', [PedidoController::class, 'devolverReserva'])->name('pedidos.reservas.devolver');
+
+    Route::get('/admin/regulamento/editar', [RegulamentoController::class, 'edit'])->name('admin.regulamento.edit');
+    Route::put('/admin/regulamento', [RegulamentoController::class, 'update'])->name('admin.regulamento.update');
 });
 
 Route::middleware(['auth', 'NotBlocked'])->group(function () {

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('bloqueio');
             $table->date("dt_nasc")->nullable();
+            $table->boolean('aceitou_regulamento')->default(false);
+            $table->timestamp('regulamento_aceito_em')->nullable();
             $table->string('foto')->nullable(); //mudei de como tava no projeto
             $table->rememberToken();
             $table->timestamps();

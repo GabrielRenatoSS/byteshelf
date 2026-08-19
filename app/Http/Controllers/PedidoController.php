@@ -298,4 +298,53 @@ class PedidoController extends Controller
 
         return back();
     }
+
+    public function reservas()
+    {
+        $reservas = Pedido::with(['componentes' => function ($query) {
+            $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
+        }, 'usuario'])
+        ->where('id_usuario', Auth::id())
+        ->where('tipo', 1)
+        ->where('ativo', 1)
+        ->orderBy('dt_solicitacao', 'desc')
+        ->get();
+
+        $reservas->each(function ($pedido) {
+            $pedido->componentes->transform(function ($componente) {
+                $componente->foto = $componente->foto1
+                    ? asset(\Illuminate\Support\Facades\Storage::url($componente->foto1))
+                    : asset('imagens/componente_padrao.png');
+                return $componente;
+            });
+        });
+
+        return view('pedidos.reservas', compact('reservas'));
+    }
+
+    public function devolverReserva(Request $request, $id)
+    {
+        $pedido = Pedido::where('id', $id)
+            ->where('id_usuario', Auth::id())
+            ->where('tipo', 1)
+            ->where('ativo', 1)
+            ->firstOrFail();
+
+        $componentes = PedidoComponente::with('componente')
+            ->where('pedido_id', $pedido->id)
+            ->get();
+
+        foreach ($componentes as $item) {
+            if ($item->componente) {
+                $item->componente->increment('qt_disponivel', $item->quantidade);
+            }
+        }
+
+        $pedido->update([
+            'status' => 'Devolvido',
+            'ativo'  => 0,
+        ]);
+
+        return back();
+    }
 }

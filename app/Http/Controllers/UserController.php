@@ -205,4 +205,16 @@ class UserController extends Controller
         }
         return back();
     }
+
+    public function aceitarRegulamento(Request $request)
+    {
+        $user = auth()->user();
+
+        $user->update([
+            'aceitou_regulamento' => true,
+            'regulamento_aceito_em' => now(),
+        ]);
+
+        return redirect()->route('home')->with('success', 'Regulamento aceito com sucesso!');
+    }
 }
