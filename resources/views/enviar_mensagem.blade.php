@@ -46,23 +46,61 @@
 
 
             <main class="content">
-                <h1>Enviar mensagem</h1> <section class="message-container">
-                    <div class="message-card">
-                        <div class="input-group">
-                            <label>Destinatário:</label>
-                            <input type="email" id="email-destino" readonly>
-                        </div>
-                        <div class="input-group">
-                            <label>Mensagem:</label>
-                            <textarea id="texto-mensagem" placeholder="Escreva aqui sua mensagem..."></textarea>
-                        </div>
-                        <div class="button-area">
-                            <button class="btn-send" onclick="enviarMensagem()">Enviar</button>
-                        </div>
-                    </div>
-                </section>
-            </main>
-    </div>
+    <h1>Enviar mensagem</h1>
+
+    <section class="message-container">
+        <div class="message-card">
+
+            @if (session('status'))
+                <p style="color: green;">{{ session('status') }}</p>
+            @endif
+
+            @if ($errors->any())
+                <p style="color: red;">{{ $errors->first() }}</p>
+            @endif
+
+            <form method="POST" action="{{ route('mensagens.enviar') }}">
+                @csrf
+
+                <div class="input-group">
+                    <label>Destinatário:</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="usuario@aluno.iffar.edu.br" 
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Assunto:</label>
+                    <input 
+                        type="text" 
+                        name="assunto" 
+                        placeholder="Assunto da mensagem" 
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Mensagem:</label>
+                    <textarea 
+                        name="mensagem" 
+                        placeholder="Escreva aqui sua mensagem..." 
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="button-area">
+                    <button type="submit" class="btn-send">
+                        Enviar mensagem
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+</main>
 
 
     <script src="mensagem.js"></script>
