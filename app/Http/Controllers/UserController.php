@@ -75,9 +75,33 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        //FAZER HOJE
+        // Busca usuários ordenados por nome de A-Z com paginação de 10 por página
+        $users = User::orderBy('name', 'asc')->paginate(10);
+
+        // Mapeia os dados garantindo o retorno da foto ou da imagem padrão
+        $users->getCollection()->transform(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'cpf' => $user->cpf,
+                'telefone' => $user->telefone,
+                'tipo' => $user->tipo,
+                'matricula' => $user->matricula,
+                'email' => $user->email,
+                'bloqueio' => $user->bloqueio,
+                'dt_nasc' => $user->dt_nasc,
+                'google_id' => $user->google_id,
+                'created_at' => $user->created_at,
+                'foto' => $user->foto 
+                    ? Storage::url($user->foto) 
+                    : asset('fotos_usuarios/foto.jpg'),
+            ];
+        });
+
+        return view('users.index', compact('users'));
     }
 
     /**

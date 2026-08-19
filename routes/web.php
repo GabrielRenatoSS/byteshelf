@@ -39,8 +39,8 @@ Route::get('/nova-senha', [RecuperarSenhaController::class, 'novaSenhaForm'])->n
 Route::post('/nova-senha', [RecuperarSenhaController::class, 'redefinirSenha'])->name('nova.senha.update');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('users', UserController::class);
-
+    Route::resource('users', UserController::class)->except(['index']);
+    
     Route::get('/home', function () {
         return view('home');
     })->name('home');
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
-
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
     Route::resource('categoria', CategoriaController::class);
     Route::resource('componente', ComponenteController::class);
