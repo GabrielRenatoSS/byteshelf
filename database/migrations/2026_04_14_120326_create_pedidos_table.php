@@ -25,8 +25,8 @@ return new class extends Migration
             $table->date('dt_retirada')->nullable();
             $table->date('dt_solic_entrega')->nullable();
             $table->date('dt_avaliacao')->nullable();
-            $table->foreignId('id_usuario')->constrained('users')->onDelete('cascade');
-            $table->foreignId('id_avaliador')->constrained('users')->onDelete('cascade')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('avaliador_id')->constrained('users')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

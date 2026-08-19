@@ -4,47 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Models\User; // ← estava faltando isso
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    private array $dominiosPermitidos = [
+        'iffarroupilha.edu.br',
+        'aluno.iffar.edu.br',
+    ];
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')
+            ->with(['hd' => 'iffarroupilha.edu.br']) // dica de "hosted domain" pro Google (não é 100% garantido)
+            ->redirect();
+    }
+
+    public function handleGoogleCallback(Request $request)
+    {
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+        } catch (\Exception $e) {
+            return redirect()->route('paglogin')->withErrors([
+                'google' => 'Não foi possível autenticar com o Google.',
+            ]);
+        }
+
+        $email = $googleUser->getEmail();
+        $dominio = substr(strrchr($email, '@'), 1);
+
+        if (!in_array($dominio, $this->dominiosPermitidos)) {
+            return redirect()->route('paglogin')->withErrors([
+                'google' => 'Use um e-mail institucional (@iffarroupilha.edu.br ou @aluno.iffar.edu.br).',
+            ]);
+        }
+
+        // Verifica se já existe usuário com esse google_id ou email
+        $user = User::where('google_id', $googleUser->getId())
+            ->orWhere('email', $email)
+            ->first();
+
+        if ($user) {
+            if (!$user->google_id) {
+                $user->google_id = $googleUser->getId();
+                $user->save();
+            }
+        } else {
+            $user = User::create([
+                'name' => $googleUser->getName(),
+                'email' => $email,
+                'google_id' => $googleUser->getId(),
+                'password' => Hash::make(Str::random(24)), // senha aleatória, não será usada
+                'tipo' => 0, // ajuste conforme sua regra de negócio
+                'matricula' => null, // ou peça em uma etapa posterior
+                'cpf' => null,       // idem
+                'bloqueio' => 0,
+            ]);
+        }
+
+        Auth::login($user);
+
+        return redirect()->route('home');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('cadastro');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'tipo'     => 'required|boolean',
-            'matricula' => 'required|string|max:255',
-            'password' => 'required',
-            'cpf' => 'required|string|max:255',
-        ]);
-
-        $data['password'] = Hash::make($data['password']);
-        $data['bloqueio'] = 0;
-        User::create($data);
-
-        return redirect()->route('login');
+        //FAZER HOJE
     }
 
     /**

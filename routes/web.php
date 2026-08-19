@@ -11,9 +11,22 @@ use App\Http\Controllers\PedidoController;
 
 Route::get('/', function () {
     return view('login');
-});
+})->name('paglogin');
 
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+
+Route::get('/cadastro', function () {
+    return view('cadastro');
+})->name('cadastro');
+//Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback'])->name('google.callback');
+
+Route::get('/cadastro', function () {
+    return view('cadastro');
+})->name('cadastro');
+//Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 // === Recuperação de senha (com código) ===
 Route::get('/recuperacaosenha', [RecuperarSenhaController::class, 'create'])->name('password.request');
@@ -47,8 +60,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
-    Route::get('/users/cadastro', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
     Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
     Route::resource('categoria', CategoriaController::class);

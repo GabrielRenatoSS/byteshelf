@@ -181,37 +181,3 @@ window.location.href = "login.html"
 
 
 }
-
-
-//CADASTRO
-
-
-document.getElementById('form-cadastro').addEventListener('submit', function(e) {
-    e.preventDefault(); // Impede a página de recarregar
-
-
-    // Pega os valores dos inputs
-    const novoUsuario = {
-        nome: document.getElementById('cad-nome').value,
-        matricula: document.getElementById('cad-matricula').value
-    };
-
-
-    // Pega a lista de usuários que já existe ou cria uma vazia
-    let listaUsuarios = JSON.parse(localStorage.getItem('usuariosSalvos')) || [];
-
-
-    // Adiciona o novo usuário na lista
-    listaUsuarios.push(novoUsuario);
-
-
-    // Salva a lista atualizada no localStorage
-    localStorage.setItem('usuariosSalvos', JSON.stringify(listaUsuarios));
-
-
-    alert("Usuário cadastrado com sucesso!");
-
-
-    // Volta para a página de listagem
-    window.location.href = '../perfil/usuarios.html';
-});

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Código de verificação</title>
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="../../public/css/login.css">
+    <link rel="stylesheet" href="../../public/css/global.css">
 </head>
 <body>
 
