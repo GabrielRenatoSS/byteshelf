@@ -15,11 +15,13 @@ class Pedido extends Model
         return $this->belongsToMany(Componente::class, 'pedido_componentes', 'pedido_id', 'componente_id')>withPivot('quantidade')->withTimestamps();
     }
 
-    public function usuario() {
-        return $this->belongsTo(User::class, 'id_usuario');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function avaliador() {
-        return $this->belongsTo(User::class, 'id_avaliador');
+    public function avaliador()
+    {
+        return $this->belongsTo(User::class, 'avaliador_id');
     }
 }

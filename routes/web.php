@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecuperarSenhaController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\MensagemEmailController;
+use App\Http\Controllers\PropostaController;
 
 Route::get('/', function () {
     return view('login');
@@ -27,11 +28,6 @@ Route::get('/cadastro', function () {
 
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback'])->name('google.callback');
-
-Route::get('/cadastro', function () {
-    return view('cadastro');
-})->name('cadastro');
-//Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 // === Recuperação de senha (com código) ===
 Route::get('/recuperacaosenha', [RecuperarSenhaController::class, 'create'])->name('password.request');
@@ -72,6 +68,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/regulamento/aceitar', [UserController::class, 'aceitarRegulamento'])->name('regulamento.aceitar');
 
     Route::get('/contato-administradores', [UserController::class, 'verContatoAdm'])->name('users.adms');
+
+    Route::get('/propostas', [PropostaController::class, 'index'])->name('propostas.index');
+    Route::delete('/propostas/{id}', [PropostaController::class, 'destroy'])->name('propostas.destroy');
+    Route::get('/propostas/{id}/status', [PropostaController::class, 'verStatus'])->name('propostas.status');
 });
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
@@ -98,6 +98,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     Route::get('/admin/regulamento/editar', [RegulamentoController::class, 'edit'])->name('admin.regulamento.edit');
     Route::put('/admin/regulamento', [RegulamentoController::class, 'update'])->name('admin.regulamento.update');
+
+    Route::patch('/propostas/{id}/aprovar', [PropostaController::class, 'aprovar'])->name('propostas.aprovar');
+    Route::patch('/propostas/{id}/rejeitar', [PropostaController::class, 'rejeitar'])->name('propostas.rejeitar');
 });
 
 Route::middleware(['auth', 'NotBlocked'])->group(function () {
@@ -105,4 +108,6 @@ Route::middleware(['auth', 'NotBlocked'])->group(function () {
     Route::post('/pedidos/{id}/recusar-sugestao', [PedidoController::class, 'recusarSugestao']);
     Route::post('/pedidos/finalizar', [PedidoController::class, 'finalizarPedido'])->name('pedidos.finalizar');
     Route::post('/pedidos/{id}/renovar', [PedidoController::class, 'renovar'])->name('pedidos.renovar');
+    Route::get('/propostas/create', [PropostaController::class, 'create'])->name('propostas.create');
+    Route::post('/propostas', [PropostaController::class, 'store'])->name('propostas.store');
 });

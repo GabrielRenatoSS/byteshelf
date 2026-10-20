@@ -36,4 +36,24 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
         ];
     }
+
+    public function propostas()
+    {
+        return $this->hasMany(Proposta::class, 'user_id');
+    }
+
+    public function propostasAvaliadas()
+    {
+        return $this->hasMany(Proposta::class, 'avaliador_id');
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'user_id');
+    }
+
+    public function pedidosAvaliados()
+    {
+        return $this->hasMany(Pedido::class, 'avaliador_id');
+    }
 }
