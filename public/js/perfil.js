@@ -40,10 +40,8 @@ window.fecharModal = function () {
     }
 };
 
-// Confirmar ação do modal
+// Confirmar ação do modal (Adapta para enviar requisições AJAX/Form para o Laravel se necessário)
 window.confirmarAcao = function () {
-    let usuariosSalvos = JSON.parse(localStorage.getItem("usuariosSalvos")) || [];
-
     if (tipoAcaoAtual === "bloquear") {
         elementoClicado.classList.add("bloqueado");
         elementoClicado.innerHTML = '<i class="fa-solid fa-unlock"></i>';
@@ -54,17 +52,12 @@ window.confirmarAcao = function () {
         alert("Usuário desbloqueado!");
     } else if (tipoAcaoAtual === "excluir") {
         const textoModal = document.getElementById("modal-texto").innerText;
-
         const nomeParaRemover = textoModal
             .replace("Tem certeza que deseja remover ", "")
             .replace("?", "")
             .trim();
 
         elementoClicado.closest(".user-row").remove();
-
-        usuariosSalvos = usuariosSalvos.filter(user => user.nome !== nomeParaRemover);
-        localStorage.setItem("usuariosSalvos", JSON.stringify(usuariosSalvos));
-
         alert(nomeParaRemover + " foi removido permanentemente!");
     }
 
@@ -90,13 +83,13 @@ window.prepararMensagem = function (email) {
     window.location.href = "/enviar-mensagem?email=" + encodeURIComponent(email);
 };
 
-// Funções de navegação
+// Funções de navegação atualizadas para as rotas do Laravel
 window.sair = function () {
     window.location.href = "/login";
 };
 
 window.catalogo = function () {
-    window.location.href = "/componente";
+    window.location.href = "/catalogo";
 };
 
 window.home = function () {
@@ -104,75 +97,14 @@ window.home = function () {
 };
 
 window.perfil = function () {
-    window.location.href = "/users";
+    window.location.href = "/perfil";
 };
 
 window.carrinho = function () {
     window.location.href = "/carrinho";
 };
 
-// Ao carregar a página
+// Configuração inicial apenas para eventos de fechar modais, sem manipulação de localStorage
 document.addEventListener("DOMContentLoaded", function () {
-    const listaHtml = document.querySelector(".user-list");
-
-    if (!listaHtml) return;
-
-    // Se a lista já veio do Laravel, não apaga ela
-    if (listaHtml.querySelector(".user-row")) {
-        return;
-    }
-
-    // Usuário padrão só para teste
-    if (!localStorage.getItem("usuariosSalvos")) {
-        const inicial = [
-            {
-                nome: "Arthur Brizola",
-                matricula: "202210045",
-                email: "arthur@aluno.iffar.edu.br"
-            }
-        ];
-
-        localStorage.setItem("usuariosSalvos", JSON.stringify(inicial));
-    }
-
-    const usuariosSalvos = JSON.parse(localStorage.getItem("usuariosSalvos")) || [];
-
-    listaHtml.innerHTML = "";
-
-    usuariosSalvos.forEach(user => {
-        const nome = user.nome || "Sem nome";
-        const matricula = user.matricula || "Sem matrícula";
-        const email = user.email || "";
-
-        const novaLinha = `
-            <div class="user-row">
-                <div class="user-info">
-                    <div class="avatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                    <div>
-                        <p class="user-name">${nome}</p>
-                        <p class="id-number">ID: ${matricula}</p>
-                    </div>
-                </div>
-
-                <div class="actions">
-                    <button class="btn-action" type="button" onclick="abrirModal('bloquear', '${nome}', this)">
-                        <i class="fa-solid fa-ban"></i>
-                    </button>
-
-                    <button class="btn-action" type="button" onclick="prepararMensagem('${email}')">
-                        <i class="fa-regular fa-envelope"></i>
-                    </button>
-
-                    <button class="btn-action" type="button" onclick="abrirModal('excluir', '${nome}', this)">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-
-        listaHtml.innerHTML += novaLinha;
-    });
+    console.log("Interface de utilizadores pronta para receber dados do Laravel.");
 });

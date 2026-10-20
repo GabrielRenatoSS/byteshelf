@@ -20,11 +20,11 @@
     </div>
 
     <div class="nav-icons">
-        <i class="fa-solid fa-house"></i>
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <i class="fa-solid fa-book-open"></i>
-        <i class="fa-solid fa-user"></i>
-        <i class="fa-solid fa-cart-shopping"></i>
+        <i class="fa-solid fa-house" onclick="home()" title="Início" style="cursor: pointer;"></i>
+        <i class="fa-solid fa-right-from-bracket" onclick="sair()" title="Sair" style="cursor: pointer;"></i>
+        <i class="fa-solid fa-book-open" onclick="catalogo()" title="Catálogo" style="cursor: pointer;"></i>
+        <i class="fa-solid fa-user" onclick="perfil()" title="Perfil" style="cursor: pointer;"></i>
+        <i class="fa-solid fa-cart-shopping" onclick="carrinho()" title="Carrinho" style="cursor: pointer;"></i>
     </div>
 </header>
 
@@ -83,7 +83,55 @@
         </div>
 
         <div class="user-list">
-            {{-- Lista de usuários aqui --}}
+            @forelse($users as $user)
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="avatar">
+                            @if($user['foto'])
+                                <img src="{{ $user['foto'] }}" alt="Foto de {{ $user['name'] }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            @else
+                                <i class="fa-solid fa-user"></i>
+                            @endif
+                        </div>
+
+                        <div>
+                            <p class="user-name">{{ $user['name'] }}</p>
+                            <p class="id-number">ID: {{ $user['matricula'] ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <!-- Botão Bloquear / Desbloquear -->
+                        <form action="{{ route('user.block', $user['id']) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('PATCH')
+                            <button class="btn-action {{ $user['bloqueio'] == 1 ? 'bloqueado' : '' }}" type="submit" title="{{ $user['bloqueio'] == 1 ? 'Desbloquear' : 'Bloquear' }}">
+                                @if($user['bloqueio'] == 1)
+                                    <i class="fa-solid fa-unlock"></i>
+                                @else
+                                    <i class="fa-solid fa-ban"></i>
+                                @endif
+                            </button>
+                        </form>
+
+                        <!-- Botão Enviar Mensagem -->
+                        <button class="btn-action" type="button" onclick="prepararMensagem('{{ $user['email'] }}')" title="Enviar Mensagem">
+                            <i class="fa-regular fa-envelope"></i>
+                        </button>
+
+                        <!-- Botão Excluir -->
+                        <form action="{{ route('users.destroy', $user['id']) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja remover {{ $user['name'] }}?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn-action" type="submit" title="Excluir">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <p class="orders-empty" style="padding: 20px; text-align: center;">Nenhum usuário cadastrado.</p>
+            @endforelse
         </div>
     </main>
 </div>

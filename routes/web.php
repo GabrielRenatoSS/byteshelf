@@ -99,7 +99,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)->except(['index']);
 
     Route::get('/home', function () {
-        return view('home');
+        return view('inicio');
     })->name('home');
 
     Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria.index');
@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
+    Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho');
     Route::post('/carrinho/add/{id}', [CarrinhoController::class, 'adicionar'])->name('carrinho.add');
     Route::post('/carrinho/remove/{id}', [CarrinhoController::class, 'remover'])->name('carrinho.remove');
 
@@ -123,6 +124,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/propostas', [PropostaController::class, 'index'])->name('propostas.index');
     Route::delete('/propostas/{id}', [PropostaController::class, 'destroy'])->name('propostas.destroy');
     Route::get('/propostas/{id}/status', [PropostaController::class, 'verStatus'])->name('propostas.status');
+
+    Route::get('/perfil', function () {
+        return app(UserController::class)->show(auth()->id());
+    })->name('perfil');
 });
 
 /*
@@ -133,10 +138,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
 
-    // A rota /users foi movida temporariamente para fora do admin para teste.
-    // Route::get('/users', [UserController::class, 'index'])->name('users.index');
-
-    Route::post('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
+    Route::patch('/user/{id}/bloqueio', [UserController::class, 'toggleBlock'])->name('user.block');
 
     Route::resource('categoria', CategoriaController::class);
     Route::resource('componente', ComponenteController::class);
@@ -154,7 +156,7 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
 
     Route::get('/componentes/estragados', [ComponenteController::class, 'estragados'])->name('componentes.estragados');
 
-    Route::get('/pedidos/minhas-reservas', [PedidoController::class, 'reservas'])->name('pedidos.reservas');
+    Route::get('/reservas', [PedidoController::class, 'reservas'])->name('reservas');
     Route::post('/pedidos/reservas/{id}/devolver', [PedidoController::class, 'devolverReserva'])->name('pedidos.reservas.devolver');
 
     Route::get('/admin/regulamento/editar', [RegulamentoController::class, 'edit'])->name('admin.regulamento.edit');
@@ -162,6 +164,8 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
 
     Route::patch('/propostas/{id}/aprovar', [PropostaController::class, 'aprovar'])->name('propostas.aprovar');
     Route::patch('/propostas/{id}/rejeitar', [PropostaController::class, 'rejeitar'])->name('propostas.rejeitar');
+    Route::get('/catalogo', [ComponenteController::class, 'index'])->name('catalogo');
+    Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios');
 });
 
 /*

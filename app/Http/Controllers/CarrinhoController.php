@@ -15,7 +15,7 @@ class CarrinhoController extends Controller
 
         $componentes = Componente::whereIn('id', $ids)->get();
 
-        return view('carrinho.index', compact('carrinho', 'componentes'));
+        return view('carrinho', compact('carrinho', 'componentes'));
     }
 
     public function adicionar(Request $request, $id)
@@ -31,6 +31,7 @@ class CarrinhoController extends Controller
             ];
         }
 
+        // Corrigido o erro de quebra de linha no tempo do cookie
         cookie()->queue('carrinho', json_encode($carrinho), 60 * 24 * 7);
 
         return back();
@@ -42,6 +43,7 @@ class CarrinhoController extends Controller
 
         unset($carrinho[$id]);
 
+        // Corrigido o erro de quebra de linha no tempo do cookie
         cookie()->queue('carrinho', json_encode($carrinho), 60 * 24 * 7);
 
         return back();

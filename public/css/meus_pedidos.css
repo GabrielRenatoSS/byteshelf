@@ -1,0 +1,721 @@
+:root {
+    --common-order-blue: #0026ff;
+    --common-order-header: #e9edff;
+    --common-order-line: #eeeeee;
+    --common-status-requested: #a9bcff;
+    --common-status-approved: #a5f3a4;
+    --common-status-denied: #ffc1bd;
+    --common-status-separating: #d4c3ff;
+    --common-status-ready: #ffc6e8;
+    --common-status-withdrawn: #fff2a4;
+    --common-status-returned: #ffc994;
+    --common-status-suggestion: #e0b0ff;
+}
+
+.common-orders-page-container {
+    height: auto !important;
+    min-height: calc(100vh - 70px);
+}
+
+.common-orders-content {
+    overflow: visible;
+    padding: 68px 60px 78px;
+}
+
+.common-orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(100%, 900px);
+    margin: 0 auto 35px;
+}
+
+.common-orders-header h1 {
+    margin: 0;
+    color: #050505;
+    font-size: 36px;
+    font-weight: 800;
+}
+
+.common-orders-tools {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.common-orders-tool-wrap {
+    position: relative;
+}
+
+.common-orders-icon-button {
+    display: grid;
+    place-items: center;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    border: 0;
+    color: var(--common-order-blue);
+    background: transparent;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.common-orders-icon-button:hover,
+.common-orders-icon-button:focus-visible {
+    transform: scale(1.08);
+}
+
+.common-orders-icon-button:focus-visible {
+    outline: 2px solid var(--common-order-blue);
+    outline-offset: 3px;
+    border-radius: 5px;
+}
+
+.common-orders-popover {
+    position: absolute;
+    z-index: 50;
+    top: calc(100% + 6px);
+    right: 0;
+    display: grid;
+    width: 178px;
+    padding: 8px;
+    border: 1.5px solid var(--common-order-blue);
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 9px 22px rgba(10, 26, 87, 0.12);
+}
+
+.common-orders-popover[hidden] {
+    display: none;
+}
+
+.common-orders-popover p {
+    margin: 0 4px 6px;
+    color: #0d0d0d;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.common-orders-popover button {
+    min-height: 32px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 6px;
+    color: #2f2f2f;
+    background: transparent;
+    font: inherit;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.common-orders-popover button:hover,
+.common-orders-popover button.is-active {
+    color: #ffffff;
+    background: var(--common-order-blue);
+}
+
+.common-orders-list {
+    display: grid;
+    gap: 28px;
+    width: min(100%, 900px);
+    margin: 0 auto;
+}
+
+.common-order-card {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 13px 33px rgba(15, 28, 78, 0.055);
+}
+
+.common-order-summary-header {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1.1fr;
+    align-items: start;
+    gap: 19px;
+    padding: 18px 30px;
+    background: var(--common-order-header);
+}
+
+.common-order-summary-header > div {
+    text-align: center;
+}
+
+.common-order-summary-label {
+    display: block;
+    margin-bottom: 9px;
+    color: #0c0c0c;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.common-order-summary-value {
+    margin: 0;
+    color: #242424;
+    font-size: 14px;
+}
+
+.common-order-period {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.common-status-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+.common-status-button:focus-visible {
+    outline: 2px solid var(--common-order-blue);
+    outline-offset: 3px;
+    border-radius: 12px;
+}
+
+.common-order-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    color: #1d1d1d;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.common-status-solicitado { background: var(--common-status-requested); }
+.common-status-aprovado { background: var(--common-status-approved); }
+.common-status-negado { background: var(--common-status-denied); }
+.common-status-em-separacao { background: var(--common-status-separating); }
+.common-status-pronto-para-retirada { background: var(--common-status-ready); }
+.common-status-retirado { background: var(--common-status-withdrawn); }
+.common-status-devolvido { background: var(--common-status-returned); }
+.common-status-sugestao-em-aberto { background: var(--common-status-suggestion); }
+.common-status-cancelado { background: #dedede; }
+
+.common-order-items {
+    display: grid;
+}
+
+.common-order-item {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 22px;
+    min-height: 90px;
+    padding: 14px 30px;
+    border-bottom: 2px solid var(--common-order-line);
+}
+
+.common-order-item-visual {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    color: var(--common-order-blue);
+    font-size: 34px;
+}
+
+.common-order-item-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.common-order-item-name {
+    margin: 0 0 5px;
+    color: #070707;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.common-order-item-quantity {
+    margin: 0;
+    color: var(--common-order-blue);
+    font-size: 14px;
+}
+
+.common-renew-button,
+.common-detail-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 31px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 3px;
+    color: #ffffff;
+    background: var(--common-order-blue);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.common-renew-button i {
+    margin-left: 6px;
+}
+
+.common-renew-button:disabled {
+    color: #ffffff;
+    background: #9d9d9d;
+    cursor: not-allowed;
+}
+
+.common-renew-button:not(:disabled):hover,
+.common-renew-button:not(:disabled):focus-visible,
+.common-detail-action:hover,
+.common-detail-action:focus-visible {
+    filter: brightness(.93);
+}
+
+.common-order-card-footer {
+    display: flex;
+    justify-content: center;
+    padding: 12px 20px 13px;
+}
+
+.common-view-order-button {
+    padding: 0;
+    border: 0;
+    color: var(--common-order-blue);
+    background: transparent;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.common-view-order-button:hover,
+.common-view-order-button:focus-visible {
+    text-decoration: underline;
+}
+
+.common-orders-empty {
+    padding: 46px 20px;
+    border-radius: 18px;
+    color: #747474;
+    background: #ffffff;
+    box-shadow: 0 13px 33px rgba(15, 28, 78, 0.05);
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Página de detalhes */
+.common-order-detail-body {
+    min-width: 320px;
+    background: #ffffff;
+}
+
+.common-order-detail-page {
+    position: relative;
+    width: min(900px, calc(100% - 160px));
+    margin: 82px auto 60px;
+}
+
+.common-order-back-button {
+    position: absolute;
+    top: 1px;
+    right: calc(100% + 55px);
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    color: var(--common-order-blue);
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.common-order-back-button:focus-visible {
+    outline: 2px solid var(--common-order-blue);
+    outline-offset: 3px;
+    border-radius: 5px;
+}
+
+.common-order-detail-card {
+    overflow: hidden;
+    border-radius: 25px;
+    background: #ffffff;
+    box-shadow: 0 15px 38px rgba(15, 28, 78, 0.06);
+}
+
+.common-order-detail-card .common-order-summary-header {
+    padding: 22px 35px;
+}
+
+.common-order-detail-card .common-order-summary-label {
+    font-size: 14px;
+}
+
+.common-order-detail-card .common-order-summary-value {
+    font-size: 15px;
+}
+
+.common-order-detail-card .common-order-status {
+    min-height: 27px;
+    padding: 4px 11px;
+    font-size: 13px;
+}
+
+.common-order-detail-card .common-order-item {
+    grid-template-columns: 108px minmax(0, 1fr) auto;
+    min-height: 146px;
+    gap: 30px;
+    padding: 23px 48px;
+}
+
+.common-order-detail-card .common-order-item-visual {
+    width: 96px;
+    height: 96px;
+    font-size: 49px;
+}
+
+.common-order-detail-card .common-order-item-name {
+    font-size: 23px;
+}
+
+.common-order-detail-card .common-order-item-quantity {
+    font-size: 18px;
+}
+
+.common-order-detail-footer {
+    padding: 31px 48px 35px;
+}
+
+.common-order-total {
+    margin: 0;
+    color: #080808;
+    font-size: 18px;
+}
+
+.common-order-total strong {
+    font-weight: 800;
+}
+
+.common-order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 26px;
+}
+
+.common-detail-action {
+    min-height: 42px;
+    padding: 9px 15px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.common-detail-action--disabled {
+    background: #9d9d9d;
+    cursor: not-allowed;
+}
+
+.common-detail-action--outline {
+    color: #ffffff;
+    background: #777777;
+}
+
+/* Modais e linha de andamento */
+.common-order-modal {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: none;
+    place-items: center;
+    padding: 20px;
+    background: rgba(247, 248, 253, .79);
+}
+
+.common-order-modal.is-open {
+    display: grid;
+}
+
+.common-order-modal-card {
+    position: relative;
+    width: min(720px, 100%);
+    padding: 32px 40px;
+    border: 1px solid #c7ccdc;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 15px 44px rgba(15, 25, 70, .14);
+}
+
+.common-order-modal-card h2 {
+    margin: 0 0 22px;
+    color: #070707;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.common-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #ffffff;
+    background: var(--common-order-blue);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.common-status-steps {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+    padding: 4px 8px 0;
+}
+
+.common-status-modal-card {
+    width: min(890px, 100%);
+    padding: 38px 54px 36px;
+}
+
+.common-status-modal-card h2 {
+    margin-bottom: 31px;
+    font-size: 29px;
+}
+
+.common-status-step {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: #a4a4a4;
+    text-align: center;
+}
+
+.common-status-step:not(:last-child)::after {
+    position: absolute;
+    top: 32px;
+    left: calc(50% + 31px);
+    width: calc(100% - 25px);
+    height: 7px;
+    content: "";
+    background: #a4a4a4;
+}
+
+.common-status-step.is-complete,
+.common-status-step.is-current {
+    color: var(--common-order-blue);
+}
+
+.common-status-step.is-complete:not(:last-child)::after {
+    background: var(--common-order-blue);
+}
+
+.common-status-node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: currentColor;
+    font-size: 29px;
+}
+
+.common-status-node i {
+    color: #ffffff;
+}
+
+.common-status-step span {
+    max-width: 112px;
+    color: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.common-status-message {
+    margin: 29px 0 0;
+    color: #555555;
+    font-size: 15px;
+    text-align: center;
+}
+
+.common-confirm-modal-card {
+    width: min(505px, 100%);
+}
+
+.common-confirm-modal-card h2,
+.common-suggestion-modal-card h2 {
+    text-align: left;
+    text-transform: none;
+}
+
+.common-confirm-description,
+.common-suggestion-text {
+    margin: 0;
+    color: #313131;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.common-suggestion-text {
+    min-height: 80px;
+    padding: 14px;
+    border-radius: 7px;
+    background: #edf0ff;
+}
+
+.common-modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 23px;
+}
+
+.common-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 17px;
+    border: 0;
+    border-radius: 5px;
+    color: #ffffff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.common-action-button--blue { background: var(--common-order-blue); }
+.common-action-button--neutral { background: #767676; }
+
+@media (max-width: 920px) {
+    .common-orders-page-container {
+        flex-direction: column !important;
+    }
+
+    .common-orders-page-container .sidebar {
+        width: calc(100% - 40px);
+        min-width: 0;
+        margin: 25px 20px 0;
+    }
+
+    .common-orders-content {
+        width: 100%;
+        padding: 50px 38px;
+    }
+
+    .common-order-detail-page {
+        width: calc(100% - 72px);
+        margin-top: 50px;
+    }
+
+    .common-order-back-button {
+        position: static;
+        margin: 0 0 16px;
+    }
+}
+
+@media (max-width: 620px) {
+    .common-orders-content {
+        padding: 34px 18px 50px;
+    }
+
+    .common-orders-header {
+        margin-bottom: 25px;
+    }
+
+    .common-orders-header h1 {
+        font-size: 28px;
+    }
+
+    .common-order-summary-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 17px 20px;
+    }
+
+    .common-order-item,
+    .common-order-detail-card .common-order-item {
+        grid-template-columns: 52px minmax(0, 1fr);
+        gap: 14px;
+        min-height: 92px;
+        padding: 16px 20px;
+    }
+
+    .common-order-item-visual,
+    .common-order-detail-card .common-order-item-visual {
+        width: 50px;
+        height: 50px;
+        font-size: 27px;
+    }
+
+    .common-order-detail-card .common-order-item-name,
+    .common-order-item-name {
+        font-size: 15px;
+    }
+
+    .common-order-detail-card .common-order-item-quantity,
+    .common-order-item-quantity {
+        font-size: 13px;
+    }
+
+    .common-order-item .common-renew-button {
+        grid-column: 2;
+        justify-self: start;
+    }
+
+    .common-order-detail-footer {
+        padding: 22px 20px;
+    }
+
+    .common-status-steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px 0;
+    }
+
+    .common-status-modal-card {
+        padding: 29px 20px;
+    }
+
+    .common-status-modal-card h2 {
+        margin-bottom: 24px;
+        font-size: 24px;
+    }
+
+    .common-status-node {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+
+    .common-status-step::after {
+        display: none;
+    }
+
+    .common-order-modal-card {
+        padding: 26px 20px;
+    }
+}

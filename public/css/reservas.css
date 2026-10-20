@@ -1,0 +1,210 @@
+:root {
+    --reservation-blue: #0026ff;
+    --reservation-active: #a5f3a4;
+    --reservation-returned: #ffc994;
+}
+
+.reservations-page-container {
+    height: auto !important;
+    min-height: calc(100vh - 70px);
+}
+
+.reservations-content {
+    overflow: visible;
+    padding: 60px 68px 70px;
+}
+
+.reservations-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(100%, 1000px);
+    margin: 0 auto 43px;
+}
+
+.reservations-header h1 {
+    margin: 0;
+    color: #050505;
+    font-size: 38px;
+    font-weight: 800;
+}
+
+.reservations-list {
+    display: grid;
+    gap: 30px;
+    width: min(100%, 1000px);
+    margin: 0 auto;
+}
+
+.reservation-preview-card {
+    overflow: hidden;
+    border-radius: 28px;
+    background: #ffffff;
+    box-shadow: 0 16px 40px rgba(15, 28, 78, 0.06);
+}
+
+.reservation-preview-card .order-summary-header {
+    grid-template-columns: 1fr 1fr 210px;
+    align-items: center;
+    padding-top: 18px;
+    padding-bottom: 18px;
+}
+
+.reservation-preview-card .order-summary-header > div:last-child {
+    transform: none;
+}
+
+.reservation-status-tag {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    min-height: 23px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    color: #161616;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.reservation-status-active { background: var(--reservation-active); }
+.reservation-status-returned { background: var(--reservation-returned); }
+
+.reservation-return-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 7px;
+    color: #ffffff;
+    background: var(--reservation-blue);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.reservation-return-button i {
+    margin-right: 11px;
+}
+
+.reservation-return-button:hover,
+.reservation-return-button:focus-visible {
+    filter: brightness(0.93);
+}
+
+.reservation-return-button:focus-visible {
+    outline: 3px solid #111111;
+    outline-offset: 3px;
+}
+
+.reservation-preview-card .order-preview-item {
+    min-height: 112px;
+    padding-top: 19px;
+    padding-bottom: 19px;
+}
+
+.reservation-preview-card .order-item-visual {
+    width: 62px;
+    height: 62px;
+    font-size: 32px;
+}
+
+.reservation-preview-card .order-item-name {
+    font-size: 17px;
+}
+
+.reservation-preview-card .order-item-quantity {
+    font-size: 15px;
+}
+
+.reservation-preview-card .order-preview-footer {
+    padding-top: 15px;
+    padding-bottom: 17px;
+}
+
+.reservation-returned-label {
+    color: #777777;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+#reservation-return-modal .order-modal-card--confirm {
+    width: min(570px, 100%);
+    padding: 31px 37px 30px;
+}
+
+#reservation-return-modal .order-modal-card h2 {
+    margin-bottom: 19px;
+    font-size: 25px;
+}
+
+#reservation-return-modal .order-modal-actions {
+    gap: 13px;
+    margin-top: 20px;
+}
+
+#reservation-return-modal .order-modal-actions .order-action-button {
+    min-height: 47px;
+    padding: 9px 17px;
+    font-size: 15px;
+}
+
+.reservations-empty {
+    padding: 55px 15px;
+    border-radius: 20px;
+    color: #6e6e6e;
+    background: #ffffff;
+    box-shadow: 0 14px 36px rgba(15, 28, 78, 0.05);
+    font-size: 16px;
+    text-align: center;
+}
+
+@media (max-width: 920px) {
+    .reservations-page-container {
+        flex-direction: column !important;
+    }
+
+    .reservations-page-container .sidebar {
+        width: calc(100% - 40px);
+        min-width: 0;
+        margin: 25px 20px 0;
+    }
+
+    .reservations-content {
+        width: 100%;
+        padding: 55px 38px 70px;
+    }
+
+    .reservation-preview-card .order-summary-header {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 620px) {
+    .reservations-content {
+        padding: 38px 18px 55px;
+    }
+
+    .reservations-header {
+        margin-bottom: 34px;
+    }
+
+    .reservations-header h1 {
+        font-size: 34px;
+    }
+
+    .reservation-preview-card .order-preview-item {
+        min-height: 95px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+
+    .reservation-return-button {
+        width: 100%;
+    }
+}

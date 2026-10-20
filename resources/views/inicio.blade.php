@@ -55,7 +55,7 @@
             <!-- INÍCIO -->
             <i
                 class="fa-solid fa-house"
-                onclick="window.location.href='{{ route('inicio') }}'"
+                onclick="window.location.href='{{ route('home') }}'"
                 title="Início">
             </i>
 
@@ -73,45 +73,26 @@
         title="Sair">
     </i>
     @endauth
-
-
-
-
             <!-- CATÁLOGO -->
             <i
                 class="fa-solid fa-book-open"
-                onclick="window.location.href='{{ route('catalogo') }}'"
+                onclick="window.location.href='{{ route('componente.index') }}'"
                 title="Catálogo">
             </i>
-
-
-
-
             <!-- PERFIL -->
             <i
                 class="fa-solid fa-user"
                 onclick="window.location.href='{{ route('perfil') }}'"
                 title="Perfil">
             </i>
-
-
-
-
             <!-- CARRINHO -->
             <i
                 class="fa-solid fa-cart-shopping"
                 onclick="carrinho()"
                 title="Carrinho">
             </i>
-
-
         </div>
-
-
     </header>
-
-
-
 
     <!-- ================= CONTEÚDO ================= -->
 

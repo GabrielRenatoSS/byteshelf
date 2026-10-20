@@ -1,83 +1,43 @@
-/* ================================================= */
-/* NAVEGAÇÃO DO HEADER */
-/* ================================================= */
-
-
 function inicio() {
-    window.location.href = "inicio.html";
+    window.location.href = "/inicio";
 }
-
-
-
 
 function catalogo() {
-    window.location.href = "../catalogo/catalogo.html";
+    window.location.href = "/catalogo";
 }
-
-
-
 
 function perfil() {
-    window.location.href = "../perfil/usuarios.html";
+    window.location.href = "/usuarios";
 }
-
-
-
 
 function carrinho() {
-    window.location.href = "../carrinho/carrinho.html";
+    window.location.href = "/carrinho";
 }
-
-
-
-
-/* ================================================= */
-/* SAIR */
-/* ================================================= */
-
 
 function sair() {
-
-
     const confirmar = confirm("Deseja realmente sair?");
 
-
     if (confirmar) {
-        window.location.href = "../login/login.html";
+        window.location.href = "/login";
     }
-
-
 }
-
-
-
 
 /* ================================================= */
 /* OPÇÕES DA TELA INICIAL */
 /* ================================================= */
 
-
 function irParaPedidos() {
-    window.location.href = "../perfil/pedidos.html";
+    window.location.href = "/pedidos";
 }
-
-
-
 
 function irParaReservas() {
-    window.location.href = "../perfil/reservas.html";
+    window.location.href = "/reservas";
 }
-
-
-
 
 function irParaCadastroComponentes() {
-    window.location.href = "../catalogo/catalogo.html";
+    window.location.href = "/catalogo";
 }
 
-
-
-
 function irParaCadastroUsuarios() {
-    window.location.href = "../perfil/cadastro.html";
+    window.location.href = "/cadastro";
 }

@@ -65,6 +65,52 @@ class PedidoController extends Controller
         return redirect()->route('catalogo')->with('success', 'Pedido realizado com sucesso!');
     }
 
+    public function index()
+    {
+        $user = Auth::user();
+
+        // Se for administrador (tipo 1), vê todos os pedidos ativos do tipo 0
+        if ($user->tipo == 1) {
+            $pedidos = Pedido::with(['componentes' => function ($query) {
+                $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
+            }, 'usuario'])
+            ->where('ativo', 1)
+            ->where('tipo', 0)
+            ->get();
+
+            $pedidos->each(function ($pedido) {
+                $pedido->componentes->transform(function ($componente) {
+                    $componente->foto = $componente->foto1
+                        ? asset(Storage::url($componente->foto1))
+                        : asset('imagens/componente_padrao.png');
+                    return $componente;
+                });
+            });
+
+            return view('pedidos', compact('pedidos'));
+        }
+
+        // Se for utilizador comum (tipo 0), lista apenas os seus próprios pedidos na view 'meus_pedidos'
+        $pedidos = Pedido::with(['componentes' => function ($query) {
+            $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
+        }])
+        ->where('id_usuario', $user->id)
+        ->where('ativo', 1)
+        ->orderBy('dt_solicitacao', 'desc')
+        ->get();
+
+        $pedidos->each(function ($pedido) {
+            $pedido->componentes->transform(function ($componente) {
+                $componente->foto = $componente->foto1
+                    ? asset(Storage::url($componente->foto1))
+                    : asset('imagens/componente_padrao.png');
+                return $componente;
+            });
+        });
+
+        return view('meus_pedidos', compact('pedidos'));
+    }
+
     public function verStatus(Request $request, $id)
     {
         $pedido = Pedido::with(['componentes' => function ($query) {
@@ -77,29 +123,15 @@ class PedidoController extends Controller
         });
 
         $temSugestao = $pedido->status === 'Sugestão em aberto';
+        $user = Auth::user();
 
-        return view('pedidos.status', compact('pedido', 'temSugestao'));
-    }
+        // Se o utilizador logado for admin (tipo 1), abre os detalhes de admin: 'pedido_detalhes'
+        if ($user->tipo == 1) {
+            return view('pedido_detalhes', compact('pedido', 'temSugestao'));
+        }
 
-    public function index()
-    {
-        $pedidos = Pedido::with(['componentes' => function ($query) {
-            $query->select('componentes.id', 'componentes.name', 'componentes.foto1');
-        }, 'usuario'])
-        ->where('ativo', 1)
-        ->where('tipo', 0)
-        ->get();
-
-        $pedidos->each(function ($pedido) {
-            $pedido->componentes->transform(function ($componente) {
-                $componente->foto = $componente->foto1
-                    ? asset(Storage::url($componente->foto1))
-                    : asset('imagens/componente_padrao.png');
-                return $componente;
-            });
-        });
-
-        return view('pedidos.index', compact('pedidos'));
+        // Se for o próprio utilizador comum (tipo 0), abre os detalhes dele: 'meu_pedido_detalhes'
+        return view('meu_pedido_detalhes', compact('pedido', 'temSugestao'));
     }
 
     public function aprovar($id)
@@ -319,7 +351,7 @@ class PedidoController extends Controller
             });
         });
 
-        return view('pedidos.reservas', compact('reservas'));
+        return view('reservas', compact('reservas'));
     }
 
     public function devolverReserva(Request $request, $id)

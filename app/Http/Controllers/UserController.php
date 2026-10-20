@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -105,23 +106,47 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         $user = User::findOrFail($id);
-        return view('usuarios', [
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'cpf' => $user->cpf,
-                'dt_nasc' => $user->dt_nasc,
-                'email' => $user->email,
-                'matricula' => $user->matricula,
-                'telefone' => $user->telefone,
-                'foto' => $user->foto 
-                    ? Storage::url($user->foto) 
-                    : '/fotos_usuarios/foto.jpg',
-            ],
-            'is_own_profile' => auth()->id() === $user->id,
+        
+        $userData = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'cpf' => $user->cpf,
+            'dt_nasc' => $user->dt_nasc,
+            'email' => $user->email,
+            'matricula' => $user->matricula,
+            'telefone' => $user->telefone,
+            'tipo' => $user->tipo, // Adicionado caso precises de verificar na view
+            'foto' => $user->foto 
+                ? Storage::url($user->foto) 
+                : '/fotos_usuarios/foto.jpg',
+        ];
+
+        $isOwnProfile = auth()->id() === $user->id;
+        $tipoUsuarioLogado = auth()->user()->tipo; // Assumindo que a coluna na tabela users se chama 'tipo'
+
+        // 1. Se o utilizador visualizado for do tipo 0
+        if ($user->tipo == 0) {
+            return view('dados_pessoais_usuario', [
+                'user' => $userData,
+                'is_own_profile' => $isOwnProfile,
+            ]);
+        }
+
+        // 2. Se for tipo 1 e estiver a olhar o próprio perfil
+        if ($isOwnProfile) {
+            return view('dados_pessoais', [
+                'user' => $userData,
+                'is_own_profile' => $isOwnProfile,
+            ]);
+        }
+
+        // 3. Se for tipo 1 a olhar o perfil de outro utilizador
+        return view('visualizar_usuario', [
+            'user' => $userData,
+            'is_own_profile' => $isOwnProfile,
         ]);
     }
 
@@ -196,12 +221,22 @@ class UserController extends Controller
     public function toggleBlock(Request $request, string $id)
     {
         $user = User::findOrFail($id);
-        if($user->tipo==0) {
-            if ($user->bloqueio == 0) $user->bloqueio = 1;
-            else $user->bloqueio = 0;
+        
+        if ($user->tipo == 0) {
+            if ($user->bloqueio == 0) {
+                $user->bloqueio = 1;
+                $mensagem = 'Usuário bloqueado com sucesso!';
+            } else {
+                $user->bloqueio = 0;
+                $mensagem = 'Usuário desbloqueado com sucesso!';
+            }
+            
             $user->save();
+
+            return back()->with('success', $mensagem);
         }
-        return back();
+
+        return back()->withErrors(['erro' => 'Não é possível bloquear este tipo de usuário.']);
     }
 
     public function aceitarRegulamento(Request $request)

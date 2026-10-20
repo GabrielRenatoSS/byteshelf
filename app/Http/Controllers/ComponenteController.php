@@ -24,8 +24,13 @@ class ComponenteController extends Controller
         }
 
         $componentes = $query->paginate(12)->withQueryString();
+        $tipoUsuario = auth()->user()->tipo;
 
-        return view('componente.index', compact('componentes'));
+        if ($tipoUsuario == 0) {
+            return view('catalogo_usuario', compact('componentes'));
+        }
+
+        return view('catalogo', compact('componentes'));
     }
 
     /**

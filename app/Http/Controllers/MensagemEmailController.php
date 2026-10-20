@@ -10,7 +10,7 @@ class MensagemEmailController extends Controller
 {
     public function form()
     {
-        return view('enviar_mensagem');
+        return view('enviar-mensagem');
     }
 
     public function enviar(Request $request)
